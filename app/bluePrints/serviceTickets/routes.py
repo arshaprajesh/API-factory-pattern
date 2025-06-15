@@ -28,7 +28,7 @@ def create_service():
     db.session.commit()
     return jsonify({"message":" got new service tickets","service ticket":service_schema.dump(new_service)}),201 
      
-#=======get customer=====
+#=======get service=====
 
 @serviceTickets_bp.route("/service", methods=['GET'])
 def get_services():
@@ -37,7 +37,7 @@ def get_services():
     service = result.all() #packs objects into a list
     return services_schema.jsonify(service),200
 
-#=======get specific customer=====
+#=======get specific service=====
 
 @serviceTickets_bp.route("/service/<int:id>", methods=['GET'])
 def get_service(id):
@@ -48,7 +48,7 @@ def get_service(id):
         return jsonify({"error": "service ticket not found"}), 400
     return service_schema.jsonify(result), 200
 
-#============UPDATE SPECIFIC USER===========
+#============UPDATE SPECIFIC service===========
 
 @serviceTickets_bp.route("/service/<int:id>", methods=['PUT'])
 def update_service(id):
@@ -68,7 +68,7 @@ def update_service(id):
     db.session.commit()
     return service_schema.jsonify(service), 200
 
-#============DELETE SPECIFIC USER===========
+#============DELETE SPECIFIC service===========
 
 @serviceTickets_bp.route("/service/<int:id>", methods=['DELETE'])
 def delete_service(id):
@@ -82,9 +82,9 @@ def delete_service(id):
     return jsonify({"message": f'service id: {id}, successfully deleted.'}), 200
 
 
-#==================ADD mechanic TO service===================
+#==================ADD  mechanic to service===================
 
-@serviceTickets_bp.route('/service/<int:service_id>/add_mechanic/<int:mechanic_id>', methods=['PUT'])
+@serviceTickets_bp.route('/<int:service_id>/add_mechanic/<int:mechanic_id>', methods=['PUT'])
 def add_mechanic(service_id, mechanic_id):
     service = db.session.get(ServiceTickets, service_id) #can use .get when querying using Primary Key
     mechanic = db.session.get(Mechanics, mechanic_id)
@@ -100,23 +100,26 @@ def add_mechanic(service_id, mechanic_id):
         return jsonify({"Message": "Invalid service id or mechanic id."}), 400
  
 
-#==============REMOVE mechanic FROM AN service ==============
+#==============REMOVE mechanic FROM service ==============
 
-@serviceTickets_bp.route('/service/<service_id>/remove_mechanic/<mechanic_id>', methods=['DELETE']) 
+@serviceTickets_bp.route('/<service_id>/remove_mechanic/<mechanic_id>', methods=['PUT']) 
 
 def remove_mechanic (service_id, mechanic_id): 
 
     service = db.session.get(ServiceTickets, service_id)  
     mechanic = db.session.get(Mechanics, mechanic_id) 
 
-    if mechanic not in service.mechanics: 
-        return jsonify({"message": "Invalid mechanic id"}), 400 
+    if service and mechanic: 
+        if  mechanic in service.mechanics: 
+            service.mechanics.remove(mechanic)
+            db.session.commit()
+            return jsonify({
+                "message":"successfully removed mechanic to service"}),200
+        return jsonify({"error":"this mechanic is not in this service"})
+        
+    return jsonify({"message": "Invalid mechanic id or service id"}), 400 
 
-    db.session.delete(mechanic) 
-    db.session.commit() 
-
-    return jsonify({"message": f"succefully deleted mechanic {mechanic_id} from {service_id}"}), 200
- 
+   
  #============Get all services for a customer========================
  
 """ @serviceTickets_bp.route("/service/customers/<customer_id>",methods=['GET']) 

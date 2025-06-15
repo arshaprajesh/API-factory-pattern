@@ -47,7 +47,7 @@ def get_customer(id):
         return customer_schema.jsonify(customer), 400
     return jsonify({"error": "Customer not found."}), 400
 
-#============UPDATE SPECIFIC USER===========
+#============UPDATE SPECIFIC customer===========
 
 @customers_bp.route("/customers/<int:id>", methods=['PUT'])
 def update_customer(id):
@@ -67,7 +67,7 @@ def update_customer(id):
     db.session.commit()
     return customer_schema.jsonify(customer), 200
 
-#============DELETE SPECIFIC USER===========
+#============DELETE SPECIFIC customer===========
 
 @customers_bp.route("/customers/<int:id>", methods=['DELETE'])
 def delete_customer(id):
