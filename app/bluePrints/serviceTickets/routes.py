@@ -6,9 +6,11 @@ from sqlalchemy import select
 from app.models import ServiceTickets,db
 from . import serviceTickets_bp
 from app.models import Customer,Mechanics
+#from app.extensions import limiter
 
 
-@serviceTickets_bp.route("/service",methods=['POST'])
+@serviceTickets_bp.route("/",methods=['POST'])
+#@limiter.limit("2 per day")
 def create_service():
     try:
         service_data=service_schema.load(request.json) 
@@ -30,7 +32,7 @@ def create_service():
      
 #=======get service=====
 
-@serviceTickets_bp.route("/service", methods=['GET'])
+@serviceTickets_bp.route("/", methods=['GET'])
 def get_services():
     query = select(ServiceTickets)
     result = db.session.execute(query).scalars() #Exectute query, and convert row objects into scalar objects (python useable)
@@ -39,7 +41,7 @@ def get_services():
 
 #=======get specific service=====
 
-@serviceTickets_bp.route("/service/<int:id>", methods=['GET'])
+@serviceTickets_bp.route("/<int:id>", methods=['GET'])
 def get_service(id):
     query=select(ServiceTickets).where(ServiceTickets.id ==id)
     result = db.session.execute(query).scalars().first()
@@ -50,7 +52,7 @@ def get_service(id):
 
 #============UPDATE SPECIFIC service===========
 
-@serviceTickets_bp.route("/service/<int:id>", methods=['PUT'])
+@serviceTickets_bp.route("/<int:id>", methods=['PUT'])
 def update_service(id):
     service = db.session.get(ServiceTickets, id)
 
@@ -70,7 +72,7 @@ def update_service(id):
 
 #============DELETE SPECIFIC service===========
 
-@serviceTickets_bp.route("/service/<int:id>", methods=['DELETE'])
+@serviceTickets_bp.route("/<int:id>", methods=['DELETE'])
 def delete_service(id):
     service = db.session.get(ServiceTickets, id)
 
@@ -102,7 +104,7 @@ def add_mechanic(service_id, mechanic_id):
 
 #==============REMOVE mechanic FROM service ==============
 
-@serviceTickets_bp.route('/<service_id>/remove_mechanic/<mechanic_id>', methods=['PUT']) 
+""" @serviceTickets_bp.route('/<service_id>/remove_mechanic/<mechanic_id>', methods=['PUT']) 
 
 def remove_mechanic (service_id, mechanic_id): 
 
@@ -117,9 +119,20 @@ def remove_mechanic (service_id, mechanic_id):
                 "message":"successfully removed mechanic to service"}),200
         return jsonify({"error":"this mechanic is not in this service"})
         
-    return jsonify({"message": "Invalid mechanic id or service id"}), 400 
+    return jsonify({"message": "Invalid mechanic id or service id"}), 400  """
 
-   
+#======================================================
+@serviceTickets_bp.route("/<int:id>", methods=['DELETE'])
+def remove_service(id):
+    service = db.session.get(ServiceTickets, id)
+
+    if not service:
+        return jsonify({"error": "service not found."}), 400
+    
+    db.session.delete(service)
+    db.session.commit()
+    return jsonify({"message": f'service id: {id}, successfully deleted.'}), 200 
+     
  #============Get all services for a customer========================
  
 """ @serviceTickets_bp.route("/service/customers/<customer_id>",methods=['GET']) 

@@ -4,8 +4,12 @@ from marshmallow import ValidationError
 from sqlalchemy import select
 from app.models import Customer,db
 from . import customers_bp
+#from app.extensions import limiter
+#from app.extensions import cache
 
-@customers_bp.route("/customers",methods=['POST'])
+
+@customers_bp.route("/",methods=['POST'])
+#@limiter.limit("3 per day") #limit this request to add 3 customer per day
 def create_customer():
     print("create customer")
     try:
@@ -30,7 +34,8 @@ def create_customer():
 
 #=======get customer=====
 
-@customers_bp.route("/customers", methods=['GET'])
+@customers_bp.route("/", methods=['GET'])
+#@cache.cached(timeout=20)
 def get_customers():
     query = select(Customer)
     result = db.session.execute(query).scalars() #Exectute query, and convert row objects into scalar objects (python useable)
@@ -39,7 +44,7 @@ def get_customers():
 
 #=======get specific customer=====
 
-@customers_bp.route("/customers/<int:id>", methods=['GET'])
+@customers_bp.route("/<int:id>", methods=['GET'])
 def get_customer(id):
     customer = db.session.get(Customer, id)
 
@@ -49,7 +54,7 @@ def get_customer(id):
 
 #============UPDATE SPECIFIC customer===========
 
-@customers_bp.route("/customers/<int:id>", methods=['PUT'])
+@customers_bp.route("/<int:id>", methods=['PUT'])
 def update_customer(id):
     customer = db.session.get(Customer, id)
 
@@ -69,7 +74,7 @@ def update_customer(id):
 
 #============DELETE SPECIFIC customer===========
 
-@customers_bp.route("/customers/<int:id>", methods=['DELETE'])
+@customers_bp.route("/<int:id>", methods=['DELETE'])
 def delete_customer(id):
     customer = db.session.get(Customer, id)
     print("customer",customer)

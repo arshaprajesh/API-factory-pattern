@@ -5,7 +5,7 @@ from sqlalchemy import select
 from app.models import Mechanics,db
 from . import mechanics_bp
 
-@mechanics_bp.route("/mechanics",methods=['POST'])
+@mechanics_bp.route("/",methods=['POST'])
 def create_mechanic():
     try:
         mechanic_data=mechanic_schema.load(request.json)
@@ -21,7 +21,7 @@ def create_mechanic():
 
 #=======get mechanics=====
 
-@mechanics_bp.route("/mechanics", methods=['GET'])
+@mechanics_bp.route("/", methods=['GET'])
 def get_mechanics():
     query = select(Mechanics)
     result = db.session.execute(query).scalars() #Exectute query, and convert row objects into scalar objects (python useable)
@@ -30,7 +30,7 @@ def get_mechanics():
 
 #=======get specific mechanic=====
 
-@mechanics_bp.route("/mechanics/<int:id>", methods=['GET'])
+@mechanics_bp.route("/<int:id>", methods=['GET'])
 def get_mechanic(id):
     mechanic = db.session.get(Mechanics, id)
 
@@ -40,7 +40,7 @@ def get_mechanic(id):
 
 #============UPDATE SPECIFIC mechanic===========
 
-@mechanics_bp.route("/mechanics/<int:id>", methods=['PUT'])
+@mechanics_bp.route("/<int:id>", methods=['PUT'])
 def update_mechanic(id):
     mechanic = db.session.get(Mechanics, id)
     print("mechanic",mechanic)
@@ -63,7 +63,7 @@ def update_mechanic(id):
 
 #============DELETE SPECIFIC mechanic===========
 
-@mechanics_bp.route("/mechanics/<int:id>", methods=['DELETE'])
+@mechanics_bp.route("/<int:id>", methods=['DELETE'])
 def delete_mechanic(id):
     print("going to delete customer")   
     mechanic = db.session.get(Mechanics, id)
