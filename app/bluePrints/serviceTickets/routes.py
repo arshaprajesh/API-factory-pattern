@@ -121,6 +121,21 @@ def remove_mechanic (service_id, mechanic_id):
         
     return jsonify({"message": "Invalid mechanic id or service id"}), 400 
 
+#=======================REMOVE mechanic FROM service[delete]====================================
+
+@serviceTickets_bp.route('/<service_id>/cut_mechanic/<mechanic_id>', methods=['DELETE'])
+def cut_mechanic (service_id, mechanic_id):
+   
+    service = db.session.get(ServiceTickets, service_id)  
+    mechanic = db.session.get(Mechanics, mechanic_id) 
+    
+    if mechanic not in service.mechanics:
+        return jsonify({"message": "Invalid mechanic id"}), 400
+
+    db.session.delete(mechanic)
+    db.session.commit()
+    return jsonify({"message": f"succefully deleted mechanic {mechanic_id} from {service_id}"}), 200
+
 
  #============Get all services for a customer========================
  
