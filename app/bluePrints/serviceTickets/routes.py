@@ -104,7 +104,7 @@ def add_mechanic(service_id, mechanic_id):
 
 #==============REMOVE mechanic FROM service ==============
 
-""" @serviceTickets_bp.route('/<service_id>/remove_mechanic/<mechanic_id>', methods=['PUT']) 
+@serviceTickets_bp.route('/<service_id>/remove_mechanic/<mechanic_id>', methods=['PUT']) 
 
 def remove_mechanic (service_id, mechanic_id): 
 
@@ -119,20 +119,9 @@ def remove_mechanic (service_id, mechanic_id):
                 "message":"successfully removed mechanic to service"}),200
         return jsonify({"error":"this mechanic is not in this service"})
         
-    return jsonify({"message": "Invalid mechanic id or service id"}), 400  """
+    return jsonify({"message": "Invalid mechanic id or service id"}), 400 
 
-#======================================================
-@serviceTickets_bp.route("/<int:id>", methods=['DELETE'])
-def remove_service(id):
-    service = db.session.get(ServiceTickets, id)
 
-    if not service:
-        return jsonify({"error": "service not found."}), 400
-    
-    db.session.delete(service)
-    db.session.commit()
-    return jsonify({"message": f'service id: {id}, successfully deleted.'}), 200 
-     
  #============Get all services for a customer========================
  
 """ @serviceTickets_bp.route("/service/customers/<customer_id>",methods=['GET']) 
