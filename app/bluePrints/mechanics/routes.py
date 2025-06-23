@@ -5,6 +5,7 @@ from sqlalchemy import select
 from app.models import Mechanics,db
 from . import mechanics_bp
 
+
 @mechanics_bp.route("/",methods=['POST'])
 def create_mechanic():
     try:

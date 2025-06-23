@@ -1,15 +1,43 @@
-from .schemas import customer_schema,customers_schema
+from .schemas import customer_schema,customers_schema#,login_schema
 from flask import request,jsonify
 from marshmallow import ValidationError
 from sqlalchemy import select
 from app.models import Customer,db
 from . import customers_bp
-#from app.extensions import limiter
-#from app.extensions import cache
+from app.extensions import limiter
+from app.extensions import cache
+from app.utils.util import encode_token,token_required
 
+@customers_bp.route("/login",methods=['POST'])
+def login():
+    try:
+        credentials = request.json
+        username = credentials['email']
+        print("username :",username)
+        password = credentials['password']
+        print("password:",password)
+    except ValidationError as e:
+        return jsonify(e.messages),400
+    
+    query = select(Customer).where(Customer.email == username)
+    customer = db.session.execute(query).scalars().first()  
+    
+    if customer and customer.password == password:
+        token = encode_token(customer.id)
+        
+        response = {    
+            "status":"success",
+            "message":"successfully logged in",
+            "token": token
+        }
+        
+        return jsonify(response),200
+    else:
+        return jsonify({"message":"invalid username or password"}),401
+        
 
 @customers_bp.route("/",methods=['POST'])
-#@limiter.limit("3 per day") #limit this request to add 3 customer per day
+@limiter.limit("5 per day") #limit this request to add 5 customer per day
 def create_customer():
     print("create customer")
     try:
@@ -35,7 +63,7 @@ def create_customer():
 #=======get customer=====
 
 @customers_bp.route("/", methods=['GET'])
-#@cache.cached(timeout=20)
+@cache.cached(timeout=20)
 def get_customers():
     query = select(Customer)
     result = db.session.execute(query).scalars() #Exectute query, and convert row objects into scalar objects (python useable)
@@ -54,7 +82,8 @@ def get_customer(id):
 
 #============UPDATE SPECIFIC customer===========
 
-@customers_bp.route("/<int:id>", methods=['PUT'])
+@customers_bp.route("/", methods=['PUT'])
+@token_required
 def update_customer(id):
     customer = db.session.get(Customer, id)
 
@@ -74,13 +103,25 @@ def update_customer(id):
 
 #============DELETE SPECIFIC customer===========
 
-@customers_bp.route("/<int:id>", methods=['DELETE'])
-def delete_customer(id):
-    customer = db.session.get(Customer, id)
-    print("customer",customer)
+@customers_bp.route("/", methods=['DELETE'])
+@token_required
+def delete_customer(customer):
+    """ customer = db.session.get(Customer, id)
     if not customer:
-        return jsonify({"error": "customer not found."}), 400
+        return jsonify({"error": "customer not found."}), 400 """
+    
+    db.session.delete(customer)
+    db.session.commit()
+    return jsonify({"message": f'customer id: {id}, successfully deleted.'}), 200 
+
+#============DELETE SPECIFIC customer(otherway)===========
+
+""" @customers_bp.route("/<int:id>", methods=['DELETE'])
+def delete_customer(id):
+    query=select(Customer).where(Customer.id==id)
+    customer=db.session.execute(query).scalars().first()
     
     db.session.delete(customer)
     db.session.commit()
     return jsonify({"message": f'customer id: {id}, successfully deleted.'}), 200
+     """

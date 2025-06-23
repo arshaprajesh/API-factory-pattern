@@ -1,4 +1,4 @@
-from.schemas import service_schema,services_schema
+from.schemas import service_schema,services_schema#,edit_service_schema,return_service_schema
 #from mechanics.schemas import mechanics_schema
 from flask import request,jsonify
 from marshmallow import ValidationError
@@ -6,11 +6,11 @@ from sqlalchemy import select
 from app.models import ServiceTickets,db
 from . import serviceTickets_bp
 from app.models import Customer,Mechanics
-#from app.extensions import limiter
+from app.extensions import limiter
 
 
 @serviceTickets_bp.route("/",methods=['POST'])
-#@limiter.limit("2 per day")
+@limiter.limit("2 per day")
 def create_service():
     try:
         service_data=service_schema.load(request.json) 
@@ -51,13 +51,13 @@ def get_service(id):
     return service_schema.jsonify(result), 200
 
 #============UPDATE SPECIFIC service===========
-
+""" 
 @serviceTickets_bp.route("/<int:id>", methods=['PUT'])
 def update_service(id):
     service = db.session.get(ServiceTickets, id)
 
     if not service:
-        return jsonify({"error": "mechanic not found."}), 400
+        return jsonify({"error": "service not found."}), 400
     
     try:
         service_data = service_schema.load(request.json)
@@ -68,7 +68,7 @@ def update_service(id):
         setattr(service, key, value)
 
     db.session.commit()
-    return service_schema.jsonify(service), 200
+    return service_schema.jsonify(service), 200 """
 
 #============DELETE SPECIFIC service===========
 
@@ -83,6 +83,37 @@ def delete_service(id):
     db.session.commit()
     return jsonify({"message": f'service id: {id}, successfully deleted.'}), 200
 
+#============EDIT SPECIFIC service===========
+
+""" @serviceTickets_bp.route("/<int:service_id>", methods=['PUT'])
+def edit_service(service_id):
+    try:
+        service_edits= edit_service_schema.load(request.json)
+    except ValidationError as e:
+        return jsonify(e.messages),400
+    
+    query= select(ServiceTickets).where(ServiceTickets.id==service_id)
+    service=db.session.execute(query).scalars().first()
+    
+    for customer_id in service_edits['add_service_ids']:
+        query= select(service).where(ServiceTickets.id == customer_id)
+        customer=db.session.execute(query).scalars().first()
+        
+        if customer and customer not in service.customers:
+            service.customers.append(customer)
+            
+    for customer_id in service_edits['remove_service_ids']:
+        query= select(service).where(ServiceTickets.id == customer_id)
+        customer=db.session.execute(query).scalars().first()
+        
+        if customer and customer in service.customers:
+            service.customers.remove(customer)
+    
+    db.session.commit()
+    return return_service_schema.jsonify(service)
+         """
+        
+        
 
 #==================ADD  mechanic to service===================
 
@@ -153,3 +184,5 @@ def get_customer_service(customer_id):
 def get_service_mechanic(service_id):
     service = db.session.get(ServiceTickets, service_id)
     return mechanics_schema.jsonify(service.mechanics), 200  """
+    
+    
