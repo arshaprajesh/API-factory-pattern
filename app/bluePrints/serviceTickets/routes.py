@@ -1,34 +1,29 @@
-from.schemas import service_schema,services_schema#,edit_service_schema,return_service_schema
+from.schemas import service_schema,services_schema,edit_service_schema,return_service_schema
 #from mechanics.schemas import mechanics_schema
 from flask import request,jsonify
 from marshmallow import ValidationError
 from sqlalchemy import select
 from app.models import ServiceTickets,db
 from . import serviceTickets_bp
-from app.models import Customer,Mechanics
-from app.extensions import limiter
+from app.models import Mechanics
+from app.models import Inventory
+
+
 
 
 @serviceTickets_bp.route("/",methods=['POST'])
-@limiter.limit("2 per day")
 def create_service():
     try:
         service_data=service_schema.load(request.json) 
     except ValidationError as e:
-        return jsonify(e.messages),400
+        return jsonify({"errors":e.messages,"invalid_data":request.json}),400
     
-    #retrieve the customer by it's id
+    new_service=ServiceTickets(**service_data)
+    #new_service = ServiceTickets(VIN = service_data['VIN'],customer_id = service_data["customer_id"])
     
-    customer=db.session.get(Customer, service_data["customer_id"])
-    print("customer:",customer)
-    if customer:
-        #new_service = ServiceTickets(VIN = service_data['VIN'],customer_id = service_data["customer_id"])
-    
-     new_service=ServiceTickets(**service_data)
-   
     db.session.add(new_service)
     db.session.commit()
-    return jsonify({"message":" got new service tickets","service ticket":service_schema.dump(new_service)}),201 
+    return jsonify({"message":"new service added","service":service_schema.dump(new_service)}),201 
      
 #=======get service=====
 
@@ -85,7 +80,7 @@ def delete_service(id):
 
 #============EDIT SPECIFIC service===========
 
-""" @serviceTickets_bp.route("/<int:service_id>", methods=['PUT'])
+@serviceTickets_bp.route("/<int:service_id>", methods=['PUT'])
 def edit_service(service_id):
     try:
         service_edits= edit_service_schema.load(request.json)
@@ -95,23 +90,23 @@ def edit_service(service_id):
     query= select(ServiceTickets).where(ServiceTickets.id==service_id)
     service=db.session.execute(query).scalars().first()
     
-    for customer_id in service_edits['add_service_ids']:
-        query= select(service).where(ServiceTickets.id == customer_id)
-        customer=db.session.execute(query).scalars().first()
+    for mechanic_id in service_edits['add_mechanic_ids']:
+        query= select(Mechanics).where(Mechanics.id == mechanic_id)
+        mechanic=db.session.execute(query).scalars().first()
         
-        if customer and customer not in service.customers:
-            service.customers.append(customer)
+        if mechanic and mechanic not in service.mechanics:
+            service.mechanics.append(mechanic)
             
-    for customer_id in service_edits['remove_service_ids']:
-        query= select(service).where(ServiceTickets.id == customer_id)
-        customer=db.session.execute(query).scalars().first()
+    for mechanic_id in service_edits['remove_mechanic_ids']:
+        query= select(Mechanics).where(Mechanics.id == mechanic_id)
+        mechanic=db.session.execute(query).scalars().first()
         
-        if customer and customer in service.customers:
-            service.customers.remove(customer)
+        if mechanic and mechanic in service.mechanics:
+            service.mechanics.remove(mechanic)
     
     db.session.commit()
     return return_service_schema.jsonify(service)
-         """
+        
         
         
 
@@ -158,7 +153,7 @@ def remove_mechanic (service_id, mechanic_id):
 def cut_mechanic (service_id, mechanic_id):
    
     service = db.session.get(ServiceTickets, service_id)  
-    mechanic = db.session.get(Mechanics, mechanic_id) 
+    mechanic = db.session.get(Inventory, mechanic_id) 
     
     if mechanic not in service.mechanics:
         return jsonify({"message": "Invalid mechanic id"}), 400
@@ -168,6 +163,22 @@ def cut_mechanic (service_id, mechanic_id):
     return jsonify({"message": f"succefully deleted mechanic {mechanic_id} from {service_id}"}), 200
 
 
+#==================ADD  inventory to service===================
+
+@serviceTickets_bp.route('/<int:service_id>/add_inventory/<int:inventory_id>', methods=['PUT'])
+def add_inventory(service_id, inventory_id):
+    service = db.session.get(ServiceTickets, service_id) #can use .get when querying using Primary Key
+    inventory = db.session.get(Inventory, inventory_id)
+
+    if service and inventory: #check to see if both exist
+        if inventory not in service.inventories: 
+            service.inventories.append(inventory) 
+            db.session.commit() 
+            return jsonify({"Message": "Successfully added inventory to service."}), 200
+        else:
+            return jsonify({"Message": "inventory is already included in this service."}), 400
+    else:
+        return jsonify({"Message": "Invalid service id or inventory id."}), 400
  #============Get all services for a customer========================
  
 """ @serviceTickets_bp.route("/service/customers/<customer_id>",methods=['GET']) 

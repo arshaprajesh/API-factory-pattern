@@ -9,10 +9,11 @@ from app.models import db
 SECRET_KEY = "super secret secrets"
 
 def encode_token(customer_id):
+    custStr = str(customer_id)
     payload = {
-        'exp' : datetime.now(timezone.utc)+timedelta(days=0,hours=1),
+        'exp' : datetime.now(timezone.utc)+timedelta(hours=1),
         'iat' : datetime.now(timezone.utc),
-        'sub' : customer_id     
+        'sub' : custStr 
     }
     
     token = jwt.encode(payload,SECRET_KEY,algorithm='HS256')
@@ -25,23 +26,20 @@ def token_required(f):
         
         if 'Authorization' in request.headers:
             token=request.headers['Authorization'].split()[1]
-            
             if not token:
                 return jsonify({'message':'missing token'}),400
             
             try:
-                data=jwt.decode(token, SECRET_KEY ,algorithms= 'HS256')
-                print(data)
+                data=jwt.decode(jwt=token,key=SECRET_KEY,algorithms='HS256')
                 customer_id = data['sub']
                 customer= db.session.get(Customer,customer_id)
                 if not customer:
-                    return jsonify({"message":"invalid token"})
+                    return jsonify({"message":"invalid token because customer doesnt exist"})
                 
             except jwt.ExpiredSignatureError as e:
                 return jsonify({'message':'token expired'}),400
-            except jwt.InvalidTokenError:
+            except jwt.InvalidTokenError as e:
                 return jsonify({'message':'invalid token'}),400
-            
             return f(customer_id , *args, **kwargs)
         else:
             return jsonify({'message':'you must be logged in to access this.'}),400

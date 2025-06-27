@@ -8,13 +8,13 @@
       "name": "Python Debugger: Module",
       "type": "debugpy",
       "request": "launch",
-      "module": "/Users/kunip004/Documents/arsha/specialization/APIpractice/app"
+      "module": "/Users/kunip004/Documents/arsha/specialization/MechanicService/app"
     },
     {
       "name": "Python Debugger: Module",
       "type": "debugpy",
       "request": "launch",
-      "module": "/Users/kunip004/Documents/arsha/specialization/APIpractice/app"
+      "module": "/Users/kunip004/Documents/arsha/specialization/MechanicService/app"
     }
   ]
 }

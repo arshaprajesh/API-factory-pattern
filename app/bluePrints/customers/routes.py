@@ -5,7 +5,7 @@ from sqlalchemy import select
 from app.models import Customer,db
 from . import customers_bp
 from app.extensions import limiter
-from app.extensions import cache
+
 from app.utils.util import encode_token,token_required
 
 @customers_bp.route("/login",methods=['POST'])
@@ -13,9 +13,7 @@ def login():
     try:
         credentials = request.json
         username = credentials['email']
-        print("username :",username)
         password = credentials['password']
-        print("password:",password)
     except ValidationError as e:
         return jsonify(e.messages),400
     
@@ -41,11 +39,8 @@ def login():
 def create_customer():
     print("create customer")
     try:
-        print(request.json)
         customer_data=customer_schema.load(request.json)
-        print("customer_data :",customer_data)
     except ValidationError as e:
-        print("ValidationError",e.messages)
         return jsonify({"errors":e.messages,"invalid_data":request.json}),400
     
     query=select(Customer).where(Customer.email == customer_data['email'])
@@ -61,14 +56,32 @@ def create_customer():
     return jsonify(customer_schema.dump(new_customer)),201 
 
 #=======get customer=====
-
+"""  
 @customers_bp.route("/", methods=['GET'])
 @cache.cached(timeout=20)
 def get_customers():
     query = select(Customer)
-    result = db.session.execute(query).scalars() #Exectute query, and convert row objects into scalar objects (python useable)
-    customers = result.all() #packs objects into a list
-    return customers_schema.jsonify(customers),200
+    customers = db.session.execute(query).scalars().all() #Exectute query, and convert row objects into scalar objects (python useable)
+   
+    return customers_schema.jsonify(customers),200 """
+
+
+#==================get customer using pagination ===========================
+
+@customers_bp.route("/", methods=['GET'])
+def get_customer_pages():
+    try:
+        page = int(request.args.get('page'))
+        per_page = int(request.args.get('per_page'))
+        query = select(Customer)
+        customer =db.paginate(query, page=page, per_page=per_page)
+        
+        return customers_schema.jsonify(customer),200
+    except:   
+        query = select(Customer)
+        customers = db.session.execute(query).scalars().all() 
+        
+        return customers_schema.jsonify(customers),200
 
 #=======get specific customer=====
 
@@ -105,23 +118,24 @@ def update_customer(id):
 
 @customers_bp.route("/", methods=['DELETE'])
 @token_required
-def delete_customer(customer):
-    """ customer = db.session.get(Customer, id)
+def delete_customer(id):
+    customer = db.session.get(Customer, id)
     if not customer:
-        return jsonify({"error": "customer not found."}), 400 """
+        return jsonify({"error": "customer not found."}), 400
     
     db.session.delete(customer)
     db.session.commit()
     return jsonify({"message": f'customer id: {id}, successfully deleted.'}), 200 
 
 #============DELETE SPECIFIC customer(otherway)===========
-
-""" @customers_bp.route("/<int:id>", methods=['DELETE'])
+"""  
+@customers_bp.route("/", methods=['DELETE'])
+@token_required
 def delete_customer(id):
     query=select(Customer).where(Customer.id==id)
     customer=db.session.execute(query).scalars().first()
     
     db.session.delete(customer)
     db.session.commit()
-    return jsonify({"message": f'customer id: {id}, successfully deleted.'}), 200
-     """
+    return jsonify({"message": f'customer id: {id}, successfully deleted.'}), 200"""
+     
