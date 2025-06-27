@@ -6,6 +6,7 @@ class ServiceTicketsSchema(ma.SQLAlchemyAutoSchema):
     mechanic = fields.Nested("MechanicSchema",many=True)
     customer = fields.Nested("CustomerSchema")
     class Meta:
+        
         model = ServiceTickets
         #fields= ("service_ids","mileage","VIN","customer_id","serviceTickets","customer","id")
         include_fk=True #Need this because Auto Schemas don't automatically recognize foreign keys (customer_id) 
