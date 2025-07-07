@@ -412,6 +412,7 @@ paths:
                   customer_id: 2
 
 #===================add and delete mechanic from service===================*******
+  /service/{service_id}: 
     put: 
       tags:
        - Service_tickets 
@@ -430,18 +431,39 @@ paths:
           required: true
           schema:
             type: object
+            $ref: "#/definitions/EditServiceRequest" # Using components/schemas
       requestBody:
-          application/json:
-            schema:
-              $ref: '#/definitions/EditServiceRequest'
+        description: Service ticket edits, specifying mechanics to add or remove
+          
       responses:
         200:
-          description: "Successfully Deleted service ticket"           
-          schema:
-            $ref: "#/definitions/DeleteServiceResponse"
-          examples:
+          description: Successfully updated service ticket
+          content:
             application/json:
-              message: "successfully deleted service ticket <id>."
+              schema:
+                $ref: "#/definitions/UpdatedService"
+              examples:
+                application/json:
+                  value: # Use 'value' for example
+                    message: "successfully updated service ticket <id>."
+        400:
+          description: Invalid input or data validation error
+          content:
+            application/json:
+              schema: # Define a schema for validation errors
+                type: object
+                properties:
+                  # Customize based on your ValidationError structure
+                  messages:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+        404:
+          description: Service ticket not found # Add a 404 response for when the service ticket doesn't exist
+        500:
+          description: Internal server error
           
       
 #=========================mechanic_service==============================
@@ -612,7 +634,7 @@ paths:
                   id: 1
                   name: "battery"
                   price: 500.00
-                  
+
     #=========================update inventory==============================  
     put:
       tags:
@@ -1015,25 +1037,28 @@ definitions:
   
 
   EditServiceRequest:
-      type: object
-      properties:
-        add_mechanic_ids:
-          type: array
-          items:
-            type: integer
-        remove_mechanic_ids:
-          type: array
-          items:
-            type: integer
-      required:
-        - add_mechanic_ids
-        - remove_mechanic_ids
+    type: object
+    properties:
+      add_mechanic_ids:
+        type: array
+        items:
+          type: integer
+        description: List of mechanic IDs to add to the service ticket
+      remove_mechanic_ids:
+        type: array
+        items:
+          type: integer
+        description: List of mechanic IDs to remove from the service ticket
+    required:
+      - add_mechanic_ids
+      - remove_mechanic_ids
 
   UpdatedService:
     type: "object"
     properties:
       message:
         type: "string" 
+        description: Confirmation message after successful update
   
   
 
