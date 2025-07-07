@@ -19,9 +19,9 @@ securityDefinitions:
   
 paths:
 #==================customers================================
+#==================login================================
   /customers/login:
     post:
-		
       summary: "Login endpoint, (generates token)"
       description: "Validates customers credentials, generates and return a customer specific token."
       parameters:
@@ -43,7 +43,7 @@ paths:
               message:"Loggin successful"
               status:"success"
 
-
+#==================create customer================================
   /customers: 
     post:
       tags:
@@ -72,7 +72,7 @@ paths:
               phone: "566 566 -6778"
               salary: 234555
               password: password123
-    
+ #==================get customers================================   
     get:
       tags:
        - Customers
@@ -83,7 +83,7 @@ paths:
           description: "Retrieved Customers Successfully"           
           schema:
             $ref: "#/definitions/AllCustomers"   
-
+#==================update customer================================
     put: 
       tags:
        - Customers 
@@ -114,7 +114,7 @@ paths:
               salary: 234555
               password: password123
     
-
+#==================delete customer================================
     delete:
       tags:
        - Customers
@@ -131,7 +131,7 @@ paths:
             application/json:
               message: "successfully deleted customer <id>."
     
-
+#==================get specific customer================================
   /customers/{id}:
     get:
       tags:
@@ -163,6 +163,7 @@ paths:
                   password: "123"
 
    #==================mechanics==========================
+   #==================create mechanic================================
   /mechanics: 
     post:
       tags:
@@ -188,7 +189,7 @@ paths:
               name: John Doe
               experiance: 7
     
-
+#==================get mechanics================================
     get:
       tags:
        - Mechanics
@@ -200,7 +201,7 @@ paths:
           schema:
             $ref: "#/definitions/AllMechanics" 
 
-
+#==================delete mechanic================================
   /mechanics/{id}:
     delete:
       tags:
@@ -223,7 +224,7 @@ paths:
             application/json:
               message: "successfully deleted mechanic <id>."
     
-
+#==================get specific mechanic================================
     get:
       tags:
        - Mechanics
@@ -248,7 +249,7 @@ paths:
                   id: 1
                   name: "John Doe"
                   experiance: 2
-  #======================update mechanics================*****
+  #======================update mechanic================*****
     put: 
       tags:
        - Mechanics 
@@ -321,7 +322,7 @@ paths:
           description: Invalid query parameter 
     
 #=========================service tickets==============================
-  
+ #========================= create service ticket============================== 
 
   /service: 
     post:
@@ -348,7 +349,7 @@ paths:
               mileage: 54000
               VIN: "rgd56"
               customer_id: 6
-    
+  #=========================get service tickets==============================  
     get:
       tags:
        - Service_tickets 
@@ -360,6 +361,7 @@ paths:
           schema:
             $ref: "#/definitions/AllServices" 
 
+#=========================delete service ticket==============================
   /service/{id}:
     delete:
       tags:
@@ -382,7 +384,7 @@ paths:
             application/json:
               message: "successfully deleted service ticket <id>."
 
-
+#=========================get specific service ticket==============================
     get:
       tags:
        - Service_tickets
@@ -523,7 +525,7 @@ paths:
 
 
 #=========================inventory==============================
-  
+  #=========================create inventory==============================
 
   /inventory: 
     post:
@@ -550,7 +552,7 @@ paths:
               name: "battery"
               price: 500.00
               
-    
+   #=========================get inventories============================== 
     get:
       tags:
        - inventory 
@@ -562,6 +564,7 @@ paths:
           schema:
             $ref: "#/definitions/AllInventory" 
 
+#=========================delete inventory==============================
   /inventory/{id}:
     delete:
       tags:
@@ -584,7 +587,7 @@ paths:
             application/json:
               message: "successfully deleted inventory <id>."
     
-
+#=========================get specific inventory==============================
     get:
       tags:
        - inventory
@@ -609,7 +612,8 @@ paths:
                   id: 1
                   name: "battery"
                   price: 500.00
-      
+                  
+    #=========================update inventory==============================  
     put:
       tags:
        - inventory
