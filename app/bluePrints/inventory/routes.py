@@ -37,7 +37,7 @@ def get_inventory(id):
     inventory = db.session.get(Inventory, id)
 
     if inventory:
-        return inventory_schema.jsonify(inventory), 400
+        return inventory_schema.jsonify(inventory), 200
     return jsonify({"error": "inventory not found."}), 400
 
 #============UPDATE SPECIFIC inventory===========
@@ -51,6 +51,8 @@ def update_inventory(id):
     
     try:
         inventory_data = inventory_schema.load(request.json)
+        if not request.is_json:
+            return jsonify({"error": "Request must be JSON"}), 415
     except ValidationError as e:
         return jsonify(e.messages), 400
     

@@ -21,7 +21,7 @@ class Customer(Base):
     name: Mapped[str] = mapped_column(db.String(255), nullable=False)
     email: Mapped[str] = mapped_column(db.String(255), nullable=False)
     address: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    phone: Mapped[str] = mapped_column(db.String(255),nullable=False)
+    phone: Mapped[str] = mapped_column(db.String(255))
     salary: Mapped[int] = mapped_column(nullable=False)
     password:Mapped[str] = mapped_column(db.String(255), nullable=False)
     

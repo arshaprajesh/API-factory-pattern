@@ -90,7 +90,7 @@ def get_customer(id):
     customer = db.session.get(Customer, id)
 
     if customer:
-        return customer_schema.jsonify(customer), 400
+        return customer_schema.jsonify(customer), 200
     return jsonify({"error": "Customer not found."}), 400
 
 #============UPDATE SPECIFIC customer===========
