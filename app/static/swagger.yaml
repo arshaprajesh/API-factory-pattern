@@ -22,6 +22,8 @@ paths:
 #==================login================================
   /customers/login:
     post:
+      tags:
+        - Customers
       summary: "Login endpoint, (generates token)"
       description: "Validates customers credentials, generates and return a customer specific token."
       parameters:
@@ -41,7 +43,7 @@ paths:
             application/json:
               token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTEzOTIyMTksImlhdCI6MTc1MTM4ODYxOSwic3ViIjoiNyJ9.c8lPZCekbiTCSuUdtkbbIQeHM5D8A4Aq6aJ3obHf4rQ"
               message:"Loggin successful"
-              status:"success"
+              status:"success"        
 
 #==================create customer================================
   /customers: 
@@ -118,8 +120,8 @@ paths:
     delete:
       tags:
        - Customers
-      summary: "Enpoint to delete a customer"
-      description: "Endpoint to delete a customer. Requires token authentication, customer must be logged in to delete their account"
+      summary: "token to delete a customer"
+      description: "token to delete a customer. Requires token authentication, customer must be logged in to delete their account"
       security:
        - bearerAuth: []
       responses:
@@ -130,7 +132,7 @@ paths:
           examples:
             application/json:
               message: "successfully deleted customer <id>."
-    
+        
 #==================get specific customer================================
   /customers/{id}:
     get:
@@ -254,21 +256,28 @@ paths:
       tags:
        - Mechanics 
       
-      summary: "Endpoint to update a mechanic."
+      summary: "Update an a mechanic by id."
       description: "to update a mechanic."
       
       parameters:
+        - name: id
+          in: path
+          required: true
+          description: "id required to update a mechanic."
+          schema:
+            type: integer
         - in: "body"
           name: "body"
-          description: "Information required to update a mechanic."
-          required: true
+          required: true  
           schema:
             $ref: "#/definitions/UpdateMechanicPayload"
       responses:
         200:
           descriptions: "Successfully Updated mechanic"
-          schema:
-            $ref: "#/definitions/UpdateMechanicResponse"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/UpdateMechanicResponse"
           examples:
                 application/json:
                   id: 1
@@ -282,18 +291,17 @@ paths:
        - Mechanics
       summary: "Returns all Mechanics who has worked on the most ticket"
       description: "Endpoint to retrieve a list of all mechanics."
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Information required to update a mechanic."
-          required: true
-          schema:
-            $ref: "#/definitions/UpdateMechanicPayload"
       responses:
         200:
-          description: "Retrieved Mechanics Successfully"           
-          schema:
-            $ref: "#/definitions/AllMechanics" 
+          description: "Retrieved Mechanics Successfully" 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:          
+                  $ref: "#/definitions/Mechanic" 
+        500:
+          description: Internal server error          
 
 #===========get mechanics name (with specific letter or letters)===============
   /mechanics/search:
@@ -968,6 +976,37 @@ definitions:
           type: "string"
         experience:
           type: "int"
+
+  
+  Mechanic:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Alice"
+        experiance:
+          type: integer
+          example: 5
+        service:
+          type: array
+          description: List of associated service tickets
+          items:
+            $ref: '#/components/schemas/Service' 
+  Service:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 101
+        mileage:
+          type: integer
+          example: 45000
+        VIN:
+          type: string
+          example: "ABC123"          
   #=====================================service================================
 
   CreateServicePayload:
