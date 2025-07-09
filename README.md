@@ -188,4 +188,85 @@ Run in local ,you need to install
 Test : 
 Test the operations in postman
 
-  
+swagger
+What: 
+ It helps you create, maintain, and organize your API documentation in a structured and user-friendly way 
+
+
+Why: 
+Swagger UI provides a web-based interface where developers can view your API's endpoints, test them out, and see example requests and responses. This makes it easy for developers to understand how to use your API and integrate it into their own projects. 
+
+How: 
+pip install flask-swagger flask_swagger_ui 
+Create static (folder)->swagger.yaml(file) 
+
+Path: 
+
+Endpoint 
+Type of request (post, get, put, delete) 
+tag (category for the route) 
+summary 
+description 
+security: Points to the security definition (Only need this for token authenticated routes) 
+parameters: Information about what the data the route requires(Only required for POST and PUT request) 
+responses: Information about what the data  route returns (Should include examples) 
+Definition(s): 
+
+PayloadDefinition: Defines the "Shape" of the incoming data (Only required for POST and PUT requests) 
+ResponseDefinitions: Defines the "Shape" of the outgoing data  
+
+
+for run in swagger(using token):-
+ ->click Authorize lock
+->type  Bearer+token
+
+for run:-
+#in terminal 
+python -m unittest discover tests 
+
+
+TDD(Test Driven Development) 
+
+What: 
+TDD is a software development process where you write tests before writing the actual code 
+
+Why: 
+  improve code quality 
+
+  speed up development 
+
+  reduce bugs 
+
+How: 
+
+Import unittest  
+
+-python3 -m venv venv 
+
+-source venv/bin/activate 
+
+-pip install flask 
+
+
+TDD follows a simple cycle: Red-Green-Refactor.
+
+1-Red Phase: 
+
+What: 
+Writing a failing test 
+
+2-Green Phase: 
+
+What: 
+Writing a simplest code to making the test pass 
+
+3-Refactoring Phase:  
+
+What: 
+Improving the code 
+
+for run:-
+source venv/bin/activate 
+run all the test files:-python -m unittest discover tests 
+
+run all the specific test files:-python -m unittest tests.test_customer 
