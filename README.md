@@ -248,6 +248,14 @@ Import unittest
 -pip install flask 
 
 
+How to open swagger: 
+
+-Run in app.py 
+-The API is running on your localhost 127.0.0.1:5000 
+-Then endpoint that renders your documentation is /api/docs  
+
+ 
+
 TDD follows a simple cycle: Red-Green-Refactor.
 
 1-Red Phase: 
