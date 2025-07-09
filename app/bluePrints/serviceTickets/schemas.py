@@ -3,7 +3,7 @@ from app.models import ServiceTickets
 from marshmallow import fields
 
 class ServiceTicketsSchema(ma.SQLAlchemyAutoSchema): 
-    mechanic = fields.Nested("MechanicSchema",many=True)
+    mechanics = fields.Nested("MechanicSchema",many=True)
     customer = fields.Nested("CustomerSchema")
     class Meta:
         

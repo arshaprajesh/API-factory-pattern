@@ -25,7 +25,7 @@ def login():
         
         response = {    
             "status":"success",
-            "message":"successfully logged in",
+            "message":"Login successful",
             "token": token
         }
         
@@ -108,9 +108,10 @@ def update_customer(id):
     except ValidationError as e:
         return jsonify(e.messages), 400
     
-    for key, value in customer_data.items():
-        setattr(customer, key, value)
-
+    """ for key, value in customer_data.items():
+        setattr(customer, key, value) """
+    for key in request.json:
+        setattr(customer, key, request.json[key])
     db.session.commit()
     return customer_schema.jsonify(customer), 200
 
