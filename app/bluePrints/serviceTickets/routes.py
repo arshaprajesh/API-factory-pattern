@@ -69,15 +69,20 @@ def update_service(id):
 
 @serviceTickets_bp.route("/<int:id>", methods=['DELETE'])
 def delete_service(id):
-    service = db.session.get(ServiceTickets, id)
-
-    if not service:
-        return jsonify({"error": "service not found."}), 400
+    query=select(ServiceTickets).where(ServiceTickets.id==id)
+    service = db.session.execute(query).scalars().first()
+    db.session.delete(service)
+    db.session.commit()
+    return jsonify({"message": f'service id: {id}, successfully deleted.'}), 200 
+  
+""" @serviceTickets_bp.route("/<int:id>", methods=['DELETE'])
+def delete_service(id):
+    query=select(ServiceTickets).where(ServiceTickets.id==id)
+    service=db.session.execute(query).scalars().first()
     
     db.session.delete(service)
     db.session.commit()
-    return jsonify({"message": f'service id: {id}, successfully deleted.'}), 200
-
+    return jsonify({"message": f'service id: {id}, successfully deleted.'}), 200 """
 #============EDIT SPECIFIC service===========
 
 @serviceTickets_bp.route("/<int:service_id>", methods=['PUT'])

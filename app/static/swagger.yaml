@@ -117,22 +117,24 @@ paths:
               password: password123
     
 #==================delete customer================================
+  
     delete:
       tags:
        - Customers
       summary: "token to delete a customer"
       description: "token to delete a customer. Requires token authentication, customer must be logged in to delete their account"
       security:
-       - bearerAuth: []
+        - bearerAuth: []
+      schema:
+            $ref: "#/definitions/DeleteCustomerResponse"
       responses:
         200:
           description: "Successfully Deleted customer"           
-          schema:
-            $ref: "#/definitions/DeleteCustomerResponse"
           examples:
             application/json:
-              message: "successfully deleted customer <id>."
-        
+              message: "customer id: 7, successfully deleted."
+        404:
+          description: "Customer not found"
 #==================get specific customer================================
   /customers/{id}:
     get:

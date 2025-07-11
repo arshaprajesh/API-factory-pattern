@@ -20,6 +20,7 @@ class TestInventory(unittest.TestCase):
      
         response = self.client.post('/inventory/', json=self.inventory_payload)
         self.assertEqual(response.status_code, 201)
+       
 
         data = response.get_json()
         self.assertEqual(data["name"], self.inventory_payload["name"])
@@ -34,6 +35,7 @@ class TestInventory(unittest.TestCase):
         db.session.commit()
         response = self.client.delete(f'/inventory/{inventory.id}')
         self.assertEqual(response.status_code, 200)
+        
     
         deleted = db.session.get(Inventory, inventory.id)
         self.assertIsNone(deleted)
@@ -91,5 +93,5 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(updated["name"], update_payload["name"])
         self.assertEqual(updated["price"], update_payload["price"])
         
-
+       
         

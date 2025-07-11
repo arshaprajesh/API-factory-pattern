@@ -4,7 +4,9 @@ from app.models import db
 
 
 
+
 app = create_app('DevelopmentConfig')
+
 
 
 with app.app_context():

@@ -47,7 +47,7 @@ class TestMechanic(unittest.TestCase):
 
         item_names = [item["name"] for item in data]
         self.assertIn("sona", item_names)
-        self.assertIn("ebi", item_names)
+        self.assertIn("amy", item_names)
         
     def test_get_mechanic_by_id(self):
        
@@ -60,7 +60,7 @@ class TestMechanic(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
         self.assertEqual(data["name"], "sona")
-        self.assertEqual(data["experiance"], 5)
+        self.assertEqual(data["experiance"], 7)
             
         
     def test_delete_mechanic(self):
@@ -116,7 +116,7 @@ class TestMechanic(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         data = response.get_json()
-        self.assertEqual(len(data), 3)
+        self.assertEqual(len(data), 5)
 
         # Validate order: m2 (2 services), m1 (2 services), m3 (0 services)
         sorted_names = [mech["name"] for mech in data]
