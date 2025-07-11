@@ -65,7 +65,7 @@ class TestService(unittest.TestCase):
         self.assertEqual(data["VIN"], "19sta") 
         self.assertEqual(data["customer_id"], 20) 
     
-    """ def test_delete_service_success(self):
+    def test_delete_service_success(self):
     
         service = ServiceTickets(mileage=50000, VIN="X123YZ", customer_id=20)
         db.session.add(service)
@@ -76,7 +76,7 @@ class TestService(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         deleted = db.session.get(ServiceTickets, service.id)
-        self.assertIsNone(deleted)    """
+        self.assertIsNone(deleted)   
         
       
     def test_edit_service_mechanics(self):
@@ -129,7 +129,7 @@ class TestService(unittest.TestCase):
         self.assertNotIn(mechanic, service.mechanics)   
     
     
-    """ def test_add_inventory_success(self):
+    def test_add_inventory_success(self):
         service = ServiceTickets(mileage=65000, VIN="Z456LM", customer_id=20)
         inventory = Inventory(name="Radiator Hose", price=150.99)
 
@@ -144,7 +144,7 @@ class TestService(unittest.TestCase):
         
         self.assertEqual(data["Message"], "Successfully added inventory to service.")
        
-        self.assertIn(inventory, service.inventories)  """
+        self.assertIn(inventory, service.inventories) 
         
     def test_add_mechanic_to_service_success(self):
         service = ServiceTickets(mileage=65000, VIN="Z456LM", customer_id=17)

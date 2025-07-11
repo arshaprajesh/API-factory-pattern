@@ -20,7 +20,7 @@ def login():
     query = select(Customer).where(Customer.email == username)
     customer = db.session.execute(query).scalars().first()  
     
-    if customer and customer.password == password:
+    if customer and Customer.password == password:
         token = encode_token(customer.id)
         
         response = {    
