@@ -61,7 +61,7 @@ paths:
             $ref: "#/definitions/CreateCustomerPayload"
       responses:
         201:
-          descriptions: "Successfull Customer Creation"
+          descriptions: "Successfull Created  Customer"
           schema:
             $ref: "#/definitions/CreateCustomerResponse"
             
@@ -765,7 +765,7 @@ definitions:
     required:
       - name
       - email
-      - addresss
+      - address
       - phone
       - salary
       - password

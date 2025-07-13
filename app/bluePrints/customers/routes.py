@@ -11,16 +11,17 @@ from app.utils.util import encode_token,token_required
 @customers_bp.route("/login",methods=['POST'])
 def login():
     try:
+        
         credentials = request.json
         username = credentials['email']
         password = credentials['password']
     except ValidationError as e:
         return jsonify(e.messages),400
     
+    
     query = select(Customer).where(Customer.email == username)
     customer = db.session.execute(query).scalars().first()  
-    
-    if customer and Customer.password == password:
+    if customer and customer.password == password:
         token = encode_token(customer.id)
         
         response = {    
@@ -37,23 +38,26 @@ def login():
 @customers_bp.route("/",methods=['POST'])
 @limiter.limit("5 per day") #limit this request to add 5 customer per day
 def create_customer():
-    print("create customer")
+    
     try:
         customer_data=customer_schema.load(request.json)
+        
     except ValidationError as e:
         return jsonify({"errors":e.messages,"invalid_data":request.json}),400
     
-    query=select(Customer).where(Customer.email == customer_data['email'])
+    query=select(Customer).where(Customer.email == customer_data.email)
     existing_customer=db.session.execute(query).scalars().all()
     if existing_customer:
+        print("email alredy existed:")
         return jsonify({"error":"Email already associated with an account"}),400
-    
-    new_customer=Customer(**customer_data)
+
+    new_customer= customer_data
     #new_customer = Customer(name=customer_data['name'], email=customer_data['email'], address=customer_data['address'],phone=customer_data['phone'],salary=customer_data['salary'])
    
     db.session.add(new_customer)
     db.session.commit()
-    return jsonify(customer_schema.dump(new_customer)),201 
+    return jsonify(customer_schema.dump(new_customer)),201
+    
 
 #=======get customer=====
 """  

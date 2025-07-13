@@ -11,6 +11,7 @@ from . import inventory_bp
 def create_inventory():
     try:
         inventory_data=inventory_schema.load(request.json)
+        print("inventory_data:",inventory_data)
     except ValidationError as e:
         return jsonify({"errors":e.messages,"invalid_data":request.json}),400
     

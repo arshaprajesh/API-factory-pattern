@@ -16,8 +16,8 @@ class TestCustomer(unittest.TestCase):
         
         
         self.customer_payload = {
-            "name": "Jane Doe",
-            "email": "aw@gmail.com",
+            "name": "Jane",
+            "email": "ad@gmail.com",
             "address": "123 Maple St",
             "phone": "123-456-7890",
             "salary": 75000
@@ -54,19 +54,21 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(len(data), 1)
 
         names = [cust["name"] for cust in data]
-        self.assertIn("Jane Doe", names)
+        self.assertIn("Jane", names)
          
     def tearDown(self):
         db.session.remove() # Remove the session to prevent lingering connections
         db.drop_all()       # Drop all tables to clean up the test database
-        self.app_context.pop()
+        self.app_context.pop() 
                
     def test_login_customer(self):
         self.login_payload = {
-            "email": "aw@gmail.com",
+            "email": "ad@gmail.com",
             "password": "456767"
         }
+        print("json data:",self.login_payload)
         response = self.client.post('/customers/login', json=self.login_payload)
+        print("response:",response.status_code)
         self.assertEqual(response.status_code, 200)
         
         data = response.get_json()
@@ -76,11 +78,11 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(data['message'], 'Login successful')
         self.assertIn('token', data)
         return data['token']  
-    
+     
     
     def test_login_customer_invalid(self):
         self.login_payload = {
-            "email": "aw@gmail.com",
+            "email": "ad@gmail.com",
             "password": "7898"
         }
         response = self.client.post('/customers/login', json=self.login_payload)
@@ -129,4 +131,4 @@ class TestCustomer(unittest.TestCase):
         
         # Confirm deletion
         deleted = db.session.get(Customer, self.customer.id)
-        self.assertIsNone(deleted)  
+        self.assertIsNone(deleted)   
