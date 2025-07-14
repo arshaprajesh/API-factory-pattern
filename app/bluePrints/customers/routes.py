@@ -125,11 +125,13 @@ def update_customer(id):
 @token_required
 def delete_customer(id):
     customer = db.session.get(Customer, id)
+    print("customer:",customer)
     if not customer:
         return jsonify({"error": "customer not found."}), 400
     
     db.session.delete(customer)
     db.session.commit()
+    print("delete:",{id})
     return jsonify({"message": f'customer id: {id}, successfully deleted.'}), 200 
 
 #============DELETE SPECIFIC customer(otherway)===========

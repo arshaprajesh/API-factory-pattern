@@ -369,7 +369,7 @@ paths:
         200:
           description: "Retrieved services Successfully"           
           schema:
-            $ref: "#/definitions/AllServices" 
+            $ref: "#/definitions/AllServiceTickets" 
 
 #=========================delete service ticket==============================
   /service/{id}:
@@ -594,7 +594,7 @@ paths:
         200:
           description: "Retrieved inventory Successfully"           
           schema:
-            $ref: "#/definitions/AllInventory" 
+            $ref: "#/definitions/AllInventoryTickets" 
 
 #=========================delete inventory==============================
   /inventory/{id}:
