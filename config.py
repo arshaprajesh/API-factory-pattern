@@ -1,6 +1,4 @@
 import os
-from sqlalchemy.dialects import registry
-registry.register("postgresql.psycopg", "psycopg.sqlalchemy", "PsycopgDialect")
 
 
 class DevelopmentConfig:
