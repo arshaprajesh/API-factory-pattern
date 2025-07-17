@@ -1,5 +1,3 @@
-from sqlalchemy.dialects import registry
-registry.register("postgresql.psycopg", "psycopg.sqlalchemy", "PsycopgDialect")
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
