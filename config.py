@@ -1,4 +1,7 @@
 import os
+from sqlalchemy.dialects import registry
+registry.register("postgresql.psycopg", "psycopg.sqlalchemy", "PsycopgDialect")
+
 
 class DevelopmentConfig:
     SQLALCHEMY_DATABASE_URI='postgresql+psycopg://root:CK123indb#1@localhost/mechanic_service'
