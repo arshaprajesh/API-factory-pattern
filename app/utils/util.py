@@ -4,9 +4,10 @@ from functools import wraps
 from flask import request,jsonify
 from app.models import Customer
 from app.models import db
+import os
 
 
-SECRET_KEY = "super secret secrets"
+SECRET_KEY = os.environ.get('SECRET_KEY') or "super secret secrets"
 
 def encode_token(customer_id):
     custStr = str(customer_id)
