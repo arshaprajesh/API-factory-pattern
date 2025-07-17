@@ -12,5 +12,5 @@ class TestingConfig:
     CACHE_TYPE = 'SimpleCache'  
     CACHE_DEFAULT_TIMEPOUT=300  
 class ProductionConfig:
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI','postgresql+psycopg://root:CK123indb#1@localhost/mechanic_service')
     CACHE_TYPE = "SimpleCache"
