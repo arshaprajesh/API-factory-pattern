@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,request, redirect, jsonify
 from .extensions import ma,limiter,cache 
 from .models import db
 from .bluePrints.customers import customers_bp
@@ -23,6 +23,21 @@ def create_app(config_name):
     app = Flask(__name__)
     CORS(app,resources={r"/*": {"origins": "*"}}, supports_credentials=True)
     
+     # ✅ Enforce HTTPS
+    @app.before_request
+    def enforce_https():
+        if not request.is_secure and request.headers.get('X-Forwarded-Proto', 'http') != 'https':
+            url = request.url.replace("http://", "https://", 1)
+            return redirect(url, code=301)
+    
+     # ✅ Handle preflight OPTIONS requests globally
+    @app.route('/<path:path>', methods=['OPTIONS'])
+    def options_handler(path):
+        response = jsonify({})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        return response
     
     
     app.config.from_object('config.' + config_name)
