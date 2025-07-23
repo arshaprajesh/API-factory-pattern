@@ -21,7 +21,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 
 def create_app(config_name):
     app = Flask(__name__)
-    CORS(app)
+    CORS(app,resources={r"/*": {"origins": "*"}})
     
     
     
