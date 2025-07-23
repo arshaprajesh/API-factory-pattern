@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask
 from .extensions import ma,limiter,cache 
 from .models import db
 from .bluePrints.customers import customers_bp
@@ -21,14 +21,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 
 def create_app(config_name):
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "*"}})
-    
-     # ✅ Enforce HTTPS
-    @app.before_request
-    def enforce_https():
-        if not request.is_secure and request.headers.get('X-Forwarded-Proto', 'http') != 'https':
-            url = request.url.replace("http://", "https://", 1)
-            return redirect(url, code=301)
+    CORS(app)
     
     
     
