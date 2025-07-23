@@ -33,12 +33,12 @@ paths:
           description: "Login Credentials"
           required: true
           schema:
-            $ref: "#/components/schemas/LoginCredentials"
+            $ref: "#/definitions/LoginCredentials"
       responses:
         200:
           description: "Login successful"
           schema:
-            $ref: "#/components/schemas/LoginResponse"
+            $ref: "#/definitions/LoginResponse"
           
           examples:
             application/json:
@@ -59,12 +59,12 @@ paths:
           description: "Information required to create a new Customer."
           required: true
           schema:
-            $ref: "#/components/schemas/CreateCustomerPayload"
+            $ref: "#/definitions/CreateCustomerPayload"
       responses:
         201:
           descriptions: "Successfull Created  Customer"
           schema:
-            $ref: "#/components/schemas/CreateCustomerResponse"
+            $ref: "#/definitions/CreateCustomerResponse"
             
           examples:
             application/json:
@@ -85,7 +85,7 @@ paths:
         200:
           description: "Retrieved Customers Successfully"           
           schema:
-            $ref: "#/components/schemas/AllCustomers"   
+            $ref: "#/definitions/AllCustomers"   
 #==================update customer================================
     put: 
       tags:
@@ -101,12 +101,12 @@ paths:
           description: "Information required to update a Customer."
           required: true
           schema:
-            $ref: "#/components/schemas/UpdateCustomerPayload"
+            $ref: "#/definitions/UpdateCustomerPayload"
       responses:
         200:
           descriptions: "Successfully Updated customer"
           schema:
-            $ref: "#/components/schemas/UpdateCustomerResponse"
+            $ref: "#/definitions/UpdateCustomerResponse"
           examples:
             application/json:
               id: 1
@@ -127,7 +127,7 @@ paths:
       security:
         - bearerAuth: []
       schema:
-            $ref: "#/components/schemas/DeleteCustomerResponse"
+            $ref: "#/definitions/DeleteCustomerResponse"
       responses:
         200:
           description: "Successfully Deleted customer"           
@@ -155,7 +155,7 @@ paths:
         200:
           description: retrieve specific Customer 
           schema:
-            $ref: '#/components/schemas/GetSpecificCustomer'
+            $ref: '#/definitions/GetSpecificCustomer'
         
           examples:
                 application/json:
@@ -181,12 +181,12 @@ paths:
           description: "Information required to create a new Mechanic."
           required: true
           schema:
-            $ref: "#/components/schemas/CreateMechanicPayload"
+            $ref: "#/definitions/CreateMechanicPayload"
       responses:
         201:
           descriptions: "Successfull Mechanic Creation"
           schema:
-            $ref: "#/components/schemas/CreateMechanicResponse"
+            $ref: "#/definitions/CreateMechanicResponse"
             
           examples:
             application/json:
@@ -204,7 +204,7 @@ paths:
         200:
           description: "Retrieved Mechanics Successfully"           
           schema:
-            $ref: "#/components/schemas/AllMechanics" 
+            $ref: "#/definitions/AllMechanics" 
 
 #==================delete mechanic================================
   /mechanics/{id}:
@@ -224,7 +224,7 @@ paths:
         200:
           description: "Successfully Deleted mechanic"           
           schema:
-            $ref: "#/components/schemas/DeleteMechanicResponse"
+            $ref: "#/definitions/DeleteMechanicResponse"
           examples:
             application/json:
               message: "successfully deleted mechanic <id>."
@@ -247,7 +247,7 @@ paths:
         200:
           description: retrieve specific mechanic 
           schema:
-            $ref: '#/components/schemas/GetSpecificMechanic'
+            $ref: '#/definitions/GetSpecificMechanic'
         
           examples:
                 application/json:
@@ -273,14 +273,14 @@ paths:
           name: "body"
           required: true  
           schema:
-            $ref: "#/components/schemas/UpdateMechanicPayload"
+            $ref: "#/definitions/UpdateMechanicPayload"
       responses:
         200:
           descriptions: "Successfully Updated mechanic"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UpdateMechanicResponse"
+                $ref: "#/definitions/UpdateMechanicResponse"
           examples:
                 application/json:
                   id: 1
@@ -302,7 +302,7 @@ paths:
               schema:
                 type: array
                 items:          
-                  $ref: "#/components/schemas/Mechanic" 
+                  $ref: "#/definitions/Mechanic" 
         500:
           description: Internal server error          
 
@@ -328,7 +328,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/MechanicName"
+                  $ref: "#/definitions/MechanicName"
         400:
           description: Invalid query parameter 
     
@@ -347,12 +347,12 @@ paths:
           description: "Information required to create a new service."
           required: true
           schema:
-            $ref: "#/components/schemas/CreateServicePayload"
+            $ref: "#/definitions/CreateServicePayload"
       responses:
         201:
           descriptions: "Successfull Service Creation"
           schema:
-            $ref: "#/components/schemas/CreateServiceResponse"
+            $ref: "#/definitions/CreateServiceResponse"
             
           examples:
             application/json:
@@ -370,7 +370,7 @@ paths:
         200:
           description: "Retrieved services Successfully"           
           schema:
-            $ref: "#/components/schemas/AllServiceTickets" 
+            $ref: "#/definitions/AllServiceTickets" 
 
 #=========================delete service ticket==============================
   /service/{id}:
@@ -390,7 +390,7 @@ paths:
         200:
           description: "Successfully Deleted service ticket"           
           schema:
-            $ref: "#/components/schemas/DeleteServiceResponse"
+            $ref: "#/definitions/DeleteServiceResponse"
           examples:
             application/json:
               message: "successfully deleted service ticket <id>."
@@ -413,7 +413,7 @@ paths:
         200:
           description: retrieve specific service 
           schema:
-            $ref: '#/components/schemas/GetSpecificService'
+            $ref: '#/definitions/GetSpecificService'
         
           examples:
                 application/json:
@@ -442,7 +442,7 @@ paths:
           required: true
           schema:
             type: object
-            $ref: "#/components/schemas/EditServiceRequest" # Using components/schemas
+            $ref: "#/definitions/EditServiceRequest" 
       requestBody:
         description: Service ticket edits, specifying mechanics to add or remove
           
@@ -452,7 +452,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UpdatedService"
+                $ref: "#/definitions/UpdatedService"
               examples:
                 application/json:
                   value: # Use 'value' for example
@@ -502,12 +502,12 @@ paths:
         content:
           application/json:
             schema:
-            $ref: "#/components/schemas/CreateMechanicServicePayload"
+            $ref: "#/definitions/CreateMechanicServicePayload"
       responses:
         201:
           descriptions: "Successfull added mechanic to service"
           schema:
-            $ref: "#/components/schemas/CreateMechanicServiceResponse"
+            $ref: "#/definitions/CreateMechanicServiceResponse"
             
           
           status:
@@ -541,12 +541,12 @@ paths:
         content:
           application/json:
             schema:
-            $ref: "#/components/schemas/CreateMechanicServicePayload"
+            $ref: "#/definitions/CreateMechanicServicePayload"
       responses:
         201:
           descriptions: "Successfull deleted mechanic from service"
           schema:
-            $ref: "#/components/schemas/DeleteMechanicServiceResponse"
+            $ref: "#/definitions/DeleteMechanicServiceResponse"
             
           
           status:
@@ -572,12 +572,12 @@ paths:
           description: "Information required to create a new inventory."
           required: true
           schema:
-            $ref: "#/components/schemas/CreateInventoryPayload"
+            $ref: "#/definitions/CreateInventoryPayload"
       responses:
         201:
           descriptions: "Successfull inventory Creation"
           schema:
-            $ref: "#/components/schemas/CreateInventoryResponse"
+            $ref: "#/definitions/CreateInventoryResponse"
             
           examples:
             application/json:
@@ -595,7 +595,7 @@ paths:
         200:
           description: "Retrieved inventory Successfully"           
           schema:
-            $ref: "#/components/schemas/AllInventoryTickets" 
+            $ref: "#/definitions/AllInventoryTickets" 
 
 #=========================delete inventory==============================
   /inventory/{id}:
@@ -615,7 +615,7 @@ paths:
         200:
           description: "Successfully Deleted inventory"           
           schema:
-            $ref: "#/components/schemas/DeleteInventoryResponse"
+            $ref: "#/definitions/DeleteInventoryResponse"
           examples:
             application/json:
               message: "successfully deleted inventory <id>."
@@ -638,7 +638,7 @@ paths:
         200:
           description: retrieve specific inventory 
           schema:
-            $ref: '#/components/schemas/GetSpecificInventory'
+            $ref: '#/definitions/GetSpecificInventory'
         
           examples:
                 application/json:
@@ -663,7 +663,7 @@ paths:
           name: "body"
           required: true
           schema:
-            $ref: '#/components/schemas/UpdateInventoryPayload'
+            $ref: '#/definitions/UpdateInventoryPayload'
 
       responses:
         200:
@@ -671,7 +671,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateInventoryResponse'
+                $ref: '#/definitions/UpdateInventoryResponse'
           examples:
             application/json:
               id: 1
@@ -702,12 +702,12 @@ paths:
         content:
           application/json:
             schema:
-            $ref: "#/components/schemas/CreateInventoryServicePayload"
+            $ref: "#/definitions/CreateInventoryServicePayload"
       responses:
         201:
           descriptions: "Successfull added inventory to service"
           schema:
-            $ref: "#/components/schemas/CreateInventoryServiceResponse"
+            $ref: "#/definitions/CreateInventoryServiceResponse"
             
           
           status:
@@ -722,8 +722,7 @@ paths:
       
 
 
-components:
-  schemas:
+definitions: 
 #==================customer================================
   LoginCredentials:
     type: "object"
@@ -998,7 +997,7 @@ components:
           type: array
           description: List of associated service tickets
           items:
-            $ref: '#/components/schemas/Service' 
+            $ref: '#/definitions/Service' 
   Service:
       type: object
       properties:
