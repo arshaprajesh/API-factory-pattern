@@ -41,7 +41,7 @@ def create_app(config_name):
     app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL) #Registering our swagger blueprint
     
   
-    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+   
      
     return app
     
