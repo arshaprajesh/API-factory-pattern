@@ -23,21 +23,6 @@ def create_app(config_name):
     app = Flask(__name__)
     CORS(app,resources={r"/*": {"origins": "*"}}, supports_credentials=True)
     
-     # ✅ Enforce HTTPS
-    @app.before_request
-    def enforce_https():
-        if not request.is_secure and request.headers.get('X-Forwarded-Proto', 'http') != 'https':
-            url = request.url.replace("http://", "https://", 1)
-            return redirect(url, code=301)
-    
-     # ✅ Handle preflight OPTIONS requests globally
-    @app.route('/<path:path>', methods=['OPTIONS'])
-    def options_handler(path):
-        response = jsonify({})
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-        return response
     
     
     app.config.from_object('config.' + config_name)
@@ -55,7 +40,25 @@ def create_app(config_name):
     app.register_blueprint(inventory_bp,url_prefix = '/inventory')
     app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL) #Registering our swagger blueprint
     
-    
+     # Enforce HTTPS
+    @app.before_request
+    def enforce_https():
+        if not request.is_secure and request.headers.get('X-Forwarded-Proto', 'http') != 'https':
+            url = request.url.replace("http://", "https://", 1)
+            return redirect(url, code=301)
+
+    # Handle OPTIONS requests
+    @app.route('/<path:path>', methods=['OPTIONS'])
+    def options_handler(path):
+        response = jsonify({})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        return response
+
+    # ✅ Enable CORS after everything is registered
+  
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
      
     return app
     

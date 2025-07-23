@@ -17,7 +17,8 @@ securityDefinitions:
     name: Authorization
     in: header
   
-paths:
+paths: 
+  
 #==================customers================================
 #==================login================================
   /customers/login:
