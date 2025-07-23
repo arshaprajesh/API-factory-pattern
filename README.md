@@ -162,7 +162,7 @@ https://api.example.com/products?page=2&page_size=10
 This fetches the second page with 10 results per page. 
 
 
-syntax = http://127.0.0.1:5000/mechanics/search?name=ma
+syntax = https://127.0.0.1:5000/mechanics/search?name=ma
 
 
  
