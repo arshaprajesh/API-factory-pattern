@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, redirect
 from .extensions import ma,limiter,cache 
 from .models import db
 from .bluePrints.customers import customers_bp
@@ -6,7 +6,7 @@ from .bluePrints.mechanics import mechanics_bp
 from .bluePrints.serviceTickets import serviceTickets_bp
 from .bluePrints.inventory import inventory_bp
 from flask_swagger_ui import get_swaggerui_blueprint
-
+from flask_cors import CORS 
 
 SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
 API_URL = '/static/swagger.yaml'  # Our API URL (can of course be a local resource)
@@ -21,6 +21,15 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 
 def create_app(config_name):
     app = Flask(__name__)
+    CORS(app, resources={r"/*": {"origins": "*"}})
+    
+     # ✅ Enforce HTTPS
+    @app.before_request
+    def enforce_https():
+        if not request.is_secure and request.headers.get('X-Forwarded-Proto', 'http') != 'https':
+            url = request.url.replace("http://", "https://", 1)
+            return redirect(url, code=301)
+    
     
     
     app.config.from_object('config.' + config_name)
