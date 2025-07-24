@@ -28,6 +28,12 @@ def create_app(config_name):
     "allow_headers": ["Content-Type", "Authorization"]
 }}, supports_credentials=True)
     
+    @app.after_request
+    def add_cors_headers(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+        return response
    
     app.config.from_object('config.' + config_name)
     
