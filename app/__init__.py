@@ -21,19 +21,8 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 
 def create_app(config_name):
     app = Flask(__name__)
-    #CORS(app, supports_credentials=True)
-    CORS(app, resources={r"/*": {
-    "origins": "*",
-    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    "allow_headers": ["Content-Type", "Authorization"]
-}}, supports_credentials=True)
-    
-    @app.after_request
-    def add_cors_headers(response):
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
-        return response
+    CORS(app, supports_credentials=True)
+   
    
     app.config.from_object('config.' + config_name)
     
