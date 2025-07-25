@@ -8,7 +8,7 @@ from . import mechanics_bp
 
 
 
-@mechanics_bp.route("/",methods=['POST'])
+@mechanics_bp.route("",methods=['POST'])
 def create_mechanic():
     try:
         mechanic_data=mechanic_schema.load(request.json)
@@ -24,7 +24,7 @@ def create_mechanic():
 
 #=======get mechanics=====
 
-@mechanics_bp.route("/", methods=['GET'])
+@mechanics_bp.route("", methods=['GET'])
 @cache.cached(timeout=20)
 def get_mechanics():
     query = select(Mechanics)

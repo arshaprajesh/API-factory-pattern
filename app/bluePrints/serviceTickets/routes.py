@@ -11,7 +11,7 @@ from app.models import Inventory
 
 
 
-@serviceTickets_bp.route("/",methods=['POST'])
+@serviceTickets_bp.route("",methods=['POST'])
 def create_service():
     try:
         service_data=service_schema.load(request.json) 
@@ -27,7 +27,7 @@ def create_service():
      
 #=======get service=====
 
-@serviceTickets_bp.route("/", methods=['GET'])
+@serviceTickets_bp.route("", methods=['GET'])
 def get_services():
     query = select(ServiceTickets)
     result = db.session.execute(query).scalars() #Exectute query, and convert row objects into scalar objects (python useable)
