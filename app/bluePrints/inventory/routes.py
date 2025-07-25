@@ -7,7 +7,7 @@ from . import inventory_bp
 
 
 
-@inventory_bp.route("/",methods=['POST'])
+@inventory_bp.route("",methods=['POST'])
 def create_inventory():
     try:
         inventory_data=inventory_schema.load(request.json)
