@@ -32,6 +32,11 @@ def create_app(config_name):
     db.init_app(app)
     limiter.init_app(app)
     cache.init_app(app)
+    #=============================
+    CORS(customers_bp)
+    CORS(mechanics_bp)
+    CORS(serviceTickets_bp)
+    CORS(inventory_bp)
     
      #=====register blue prints=======
     app.register_blueprint(customers_bp,url_prefix = '/customers')
