@@ -3,7 +3,7 @@ info:
   title: "mechanic_service"
   description: "This is a API to manage a mechanic service"
   version: "1.0.0"
-host: "api-factory-pattern.onrender.com/static/swagger.yaml"
+host: "api-factory-pattern.onrender.com"
 
 schemes:
   - "https"
