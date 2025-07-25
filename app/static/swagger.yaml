@@ -329,7 +329,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/definitions/MechanicName"
+                  $ref: "#/definitions/MechanicNameResponse"
         400:
           description: Invalid query parameter 
     
