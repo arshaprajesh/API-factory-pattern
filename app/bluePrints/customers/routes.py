@@ -35,7 +35,7 @@ def login():
         return jsonify({"message":"invalid username or password"}),401
         
 
-@customers_bp.route("/",methods=['POST'])
+@customers_bp.route("",methods=['POST'])
 @limiter.limit("5 per day") #limit this request to add 5 customer per day
 def create_customer():
     
@@ -72,7 +72,7 @@ def get_customers():
 
 #==================get customer using pagination ===========================
 
-@customers_bp.route("/", methods=['GET'])
+@customers_bp.route("", methods=['GET'])
 def get_customer_pages():
     try:
         page = int(request.args.get('page'))
@@ -99,7 +99,7 @@ def get_customer(id):
 
 #============UPDATE SPECIFIC customer===========
 
-@customers_bp.route("/", methods=['PUT'])
+@customers_bp.route("", methods=['PUT'])
 @token_required
 def update_customer(id):
     customer = db.session.get(Customer, id)
@@ -121,7 +121,7 @@ def update_customer(id):
 
 #============DELETE SPECIFIC customer===========
 
-@customers_bp.route("/", methods=['DELETE'])
+@customers_bp.route("", methods=['DELETE'])
 @token_required
 def delete_customer(id):
     customer = db.session.get(Customer, id)
