@@ -23,7 +23,7 @@ def create_inventory():
 
 #=======get inventories=====
  
-@inventory_bp.route("/", methods=['GET'])
+@inventory_bp.route("", methods=['GET'])
 def get_inventoris():
     query = select(Inventory)
     inventories = db.session.execute(query).scalars().all() 
