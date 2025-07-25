@@ -4,6 +4,7 @@ info:
   description: "This is a API to manage a mechanic service"
   version: "1.0.0"
 host: "api-factory-pattern.onrender.com"
+basePath: "/"
 schemes:
   - "https"
 consumes:
