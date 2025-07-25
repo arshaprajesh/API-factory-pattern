@@ -9,7 +9,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS 
 
 SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
-API_URL = '/static/swagger.yaml'  # Our API URL (can of course be a local resource)
+API_URL = 'https://api-factory-pattern.onrender.com/static/swagger.yaml'  # Our API URL (can of course be a local resource)
 
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
